@@ -35,7 +35,7 @@ This project implements an AI-powered log parsing and question-answering system 
     streamlit run /main.py
    ```
    
-## Stremlit UI
+## 📊 Stremlit UI
 
 <img width="2560" height="1005" alt="image" src="https://github.com/user-attachments/assets/fa8433a5-8815-4bb0-aa98-7767f07c4793" />
 
