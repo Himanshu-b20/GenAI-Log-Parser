@@ -1,4 +1,4 @@
-# 🔍 Log Parser with RAG Architecture using Groq & ChromaDB
+# 🔍 Log Parser with RAG Architecture using Groq
 This project implements an AI-powered log parsing and question-answering system using a Retrieval-Augmented Generation (RAG) architecture. It allows users to upload raw log files, parse and vectorize their contents, store them in ChromaDB, and ask natural language questions about the logs. The system retrieves relevant log chunks and forwards them to a Groq-hosted LLM for contextual and accurate responses.
 
 ## 🚀 Features
