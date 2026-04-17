@@ -49,7 +49,7 @@ If you don't find relevant information in the logs, say so explicitly and provid
     messages = [
         SystemMessagePromptTemplate.from_template(system_prompt),
         HumanMessagePromptTemplate.from_template(
-            """Use the following context to answer the question and When identifying errors, always suggest possible root causes and solutions (This is important).
+            """Use the following context to answer the question and When identifying errors, always suggest possible root causes and solutions. From the context try to find the Class name and method name from where the exception occurred and point out in you response  (This is important).
 
 {summaries}
 
