@@ -33,11 +33,17 @@ def generate_answer(query):
         raise RuntimeError('Vector Database is Not Initialize..')
 
     # 1. Define your system prompt
-    system_prompt = """You are an expert log analyst AI assistant.
-Your job is to analyze application logs and provide clear, concise answers.
-When identifying errors, always suggest possible root causes and solutions (This is important).
-If you don't find relevant information in the logs, say so explicitly and provide your thoughts and inputs around that.
-"""
+    system_prompt = """You are an expert log analyst for a Java microservice system (AuthService, OrderService, InventoryService, PaymentGateway, UserService).
+
+    Logs follow two formats:
+    - Format 1: `TIMESTAMP LEVEL [Service] [user=X request_id=Y action=Z thread=T] - message` (+ optional Java stack trace)
+    - Format 2: `TIMESTAMP LEVEL [Service] [user=X req_id=Y method=M uri=U status=S latency=Xms thread=T] - message`
+
+    For every ERROR: quote the log line, identify the exception, give 2 likely root causes and a fix.
+    For every WARN: assess severity and recommend action.
+    For performance issues: flag latency >800ms and memory >80%.
+    If info is missing, say so and suggest what data would help.
+    Always end with prioritized next steps: Critical → High → Medium → Low."""
 
     # 2. Build the document prompt (how each retrieved chunk is formatted)
     document_prompt = PromptTemplate(
@@ -49,12 +55,12 @@ If you don't find relevant information in the logs, say so explicitly and provid
     messages = [
         SystemMessagePromptTemplate.from_template(system_prompt),
         HumanMessagePromptTemplate.from_template(
-            """Use the following context to answer the question and When identifying errors, always suggest possible root causes and solutions. From the context try to find the Class name and method name from where the exception occurred and point out in you response  (This is important).
+            """Use the log chunks below to answer the question. For each ERROR include the exception, root cause, and fix. For each WARN assess risk. Correlate by request_id where possible. End with prioritized next steps.
 
-{summaries}
+        {summaries}
 
-Question: {question}
-Answer:"""
+        Question: {question}
+        Answer:"""
         )
     ]
     qa_prompt = ChatPromptTemplate.from_messages(messages)
